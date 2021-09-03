@@ -98,8 +98,7 @@ evaluateTrack = function(track){
   track_line = points2line_trajectory(track)
   plot(track_line["speed"], lwd = track_line$speed)
 
-  m <- leaflet::addPolylines(leaflet::addTiles(leaflet::leaflet(track_line)))
-  m
-  return(1)
+  leaflet::addPolylines(leaflet::addTiles(leaflet::leaflet(track_line)))
+
 }
 
