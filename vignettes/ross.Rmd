@@ -1,0 +1,56 @@
+---
+title: "ross"
+author: "Katharina Hovestadt"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{ross}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo=FALSE, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(ross)
+library(sf)
+library(osmdata)
+library(tidyverse)
+library(units)
+library(leaflet)
+```
+
+## introduction + motivation
+
+## data description + exploration 
+
+## the analysis resulting in figures and numbers
+
+## discussion of the results
+
+```{r}
+gpx_features = readGPXFile("../inst/extdata//track_run.gpx")
+bbox <- sf::st_bbox(gpx_features)
+osm_features = readOSMFiles(bbox)
+threshold = 10
+```
+
+
+```{r}
+#filterForClosePoints(gpx_features, threshold)
+```
+
+
+```{r}
+bringFeatureToOSM(gpx_features, osm_features, threshold)
+```
+
+
+```{r}
+evaluateTrack(gpx_features)
+```
+
