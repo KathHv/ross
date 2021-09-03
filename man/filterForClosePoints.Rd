@@ -23,6 +23,8 @@ Whenever the distance to one direct neighboring point is less than the threshold
 It has the main purpose to identify outliers of GPS measurements when the receiver misslocated itself
 }
 \examples{
+\dontrun{
 track = readGPXFile("./inst/extdata/track_run.gpx")
 filteredTrack = filterForClosePoints(track, 2)
+}
 }

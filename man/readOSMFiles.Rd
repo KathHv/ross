@@ -16,7 +16,9 @@ list of requested features cropped by the bounding box.
 Returns all OSM features within a bounding box
 }
 \examples{
-track = readGPXFile("./inst/extdata/track_run.gpx")
-bbox <- st_bbox(track)
-osm_features = readOSMFiles(bbox)
+\dontrun{
+ track = readGPXFile("./inst/extdata/track_run.gpx")
+ bbox <- st_bbox(track)
+ osm_features = readOSMFiles(bbox)
+}
 }

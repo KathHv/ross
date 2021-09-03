@@ -5,7 +5,9 @@
 #' @param fp Path to GPX file.
 #' @return content of GPX file.
 #' @examples
-#' track = readGPXFile("./inst/extdata/track_run.gpx")
+#' \dontrun{
+#'  track = readGPXFile("./inst/extdata/track_run.gpx")
+#' }
 #' @export
 readGPXFile = function(fp) {
   sf::st_layers(fp)
@@ -21,9 +23,11 @@ readGPXFile = function(fp) {
 #' @param bbox bounding box. Must be ordered like this: left, bottom, right top
 #' @return list of requested features cropped by the bounding box.
 #' @examples
-#' track = readGPXFile("./inst/extdata/track_run.gpx")
-#' bbox <- st_bbox(track)
-#' osm_features = readOSMFiles(bbox)
+#' \dontrun{
+#'  track = readGPXFile("./inst/extdata/track_run.gpx")
+#'  bbox <- st_bbox(track)
+#'  osm_features = readOSMFiles(bbox)
+#' }
 #' @export
 readOSMFiles = function(bbox){
   osm_features <-  osmdata::osmdata_sf(osmdata::add_osm_feature(osmdata::opq(bbox), "secondary", ""), quiet = FALSE)
@@ -52,8 +56,10 @@ readOSMFiles = function(bbox){
 #' @param threshold Distance threshold. Unit based on crs of track of Points.
 #' @return Returns all entries of the \code{trackOfPoints} that are close enough.
 #' @examples
+#' \dontrun{
 #' track = readGPXFile("./inst/extdata/track_run.gpx")
 #' filteredTrack = filterForClosePoints(track, 2)
+#' }
 #' @export
 filterForClosePoints = function(track, threshold){
   validPoints = data.frame(track[1,])
@@ -63,13 +69,13 @@ filterForClosePoints = function(track, threshold){
     if(distMatrix[1,2] < thresholdUnits|| distMatrix[2,3] < thresholdUnits){
       validPoints <- rbind(
         validPoints,
-        stats:setNames(data.frame(track[x,]), colnames(validPoints))
+        stats::setNames(data.frame(track[x,]), colnames(validPoints))
       )
     }
   }
   validPoints <- rbind(
     validPoints,
-    stats:setNames(data.frame(track[length(track$geometry)]), colnames(validPoints))
+    stats::setNames(data.frame(track[length(track$geometry),]), colnames(validPoints))
   )
   return(validPoints)
 }

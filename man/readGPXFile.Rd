@@ -16,5 +16,7 @@ content of GPX file.
 source: https://geocompr.github.io/geocompkg/articles/gps-tracks.html?tag=makemoney0821-20
 }
 \examples{
-track = readGPXFile("./inst/extdata/track_run.gpx")
+\dontrun{
+ track = readGPXFile("./inst/extdata/track_run.gpx")
+}
 }

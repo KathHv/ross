@@ -8,6 +8,13 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+In case of a missing vignette, I recommend to run the following
+```{r, eval = FALSE}
+tools::buildVignettes(dir = ".", tangle=TRUE)
+dir.create("inst/doc")
+file.copy(dir("vignettes", full.names=TRUE), "inst/doc", overwrite=TRUE)
+```
+
 ```{r, echo=FALSE, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -22,6 +29,7 @@ library(osmdata)
 library(tidyverse)
 library(units)
 library(leaflet)
+library(stats)
 ```
 
 ## introduction + motivation
@@ -41,7 +49,7 @@ threshold = 10
 
 
 ```{r}
-#filterForClosePoints(gpx_features, threshold)
+filterForClosePoints(gpx_features, threshold)
 ```
 
 

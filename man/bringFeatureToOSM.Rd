@@ -22,8 +22,10 @@ Depending on the distance's threshold, either the closest point on the OSM lines
 The function returns a track matched to the OSM features. The track is returned in crs EPSG:4326.
 }
 \examples{
+ \dontrun{
 track = readGPXFile("./inst/extdata/track_run.gpx")
 bbox <- st_bbox(track)
 osm_features = readOSMFiles(bbox, c("tertiary, secondary, sidewalk, footway"))
 osm_track = bringFeatureToOSM(track, osm_features, 10)
+}
 }

@@ -17,5 +17,7 @@ Convert a list of observations of Points to a list of observations with lines be
 The conversion adds the parameter speed.
 }
 \examples{
+ \dontrun{
 points2line_trajectory(c(st_point(c(0,1)), st_point(c(1,2)), st_point(c(4,1)), st_point(c(4,2))))
+}
 }

@@ -7,7 +7,9 @@
 #' @param p points
 #' @return The points of \code{p} merged to linestrings starting with \code{p[i-1]} and ending with \code{p[i]}.
 #' @examples
+#'  \dontrun{
 #' points2line_trajectory(c(st_point(c(0,1)), st_point(c(1,2)), st_point(c(4,1)), st_point(c(4,2))))
+#' }
 points2line_trajectory = function(p) {
   c = sf::st_coordinates(p)
   i = seq(nrow(p) - 2)
@@ -38,10 +40,12 @@ points2line_trajectory = function(p) {
 #' @param threshold Distance threshold in meters.s
 #' @return Closest distance between \code{x} and \code{y}.
 #' @examples
+#'  \dontrun{
 #' track = readGPXFile("./inst/extdata/track_run.gpx")
 #' bbox <- st_bbox(track)
 #' osm_features = readOSMFiles(bbox, c("tertiary, secondary, sidewalk, footway"))
 #' osm_track = bringFeatureToOSM(track, osm_features, 10)
+#' }
 #' @export
 bringFeatureToOSM = function(track, osm_features, threshold){
   osm_feature = sf::st_union(c(sf::st_union(osm_features$osm_lines), sf::st_union(osm_features$osm_multilines)))
@@ -70,8 +74,7 @@ bringFeatureToOSM = function(track, osm_features, threshold){
 }
 
 
-
-#Visualize results
+utils::globalVariables("m")
 
 #' A trajectory gets analyzed with respect to movement statistics.
 #'
@@ -97,6 +100,6 @@ evaluateTrack = function(track){
 
   m <- leaflet::addPolylines(leaflet::addTiles(leaflet::leaflet(track_line)))
   m
-  return(true)
+  return(1)
 }
 
