@@ -18,7 +18,9 @@ Imports:
   geosphere (>= 1.5-10),
   magrittr,
   purrr,
-  stats
+  stats,
+  trackeR,
+  rgdal
 Suggests:
     rmarkdown,
     knitr,

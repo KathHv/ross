@@ -2,12 +2,12 @@
 % Please edit documentation in R/matchGPXtoNearbyOSM.R
 \name{evaluateTrack}
 \alias{evaluateTrack}
-\title{A trajectory gets analyzed with respect to movement statistics.}
+\title{A GPX trajectory gets analyzed with respect to movement statistics.}
 \usage{
-evaluateTrack(track)
+evaluateTrack(filePath)
 }
 \arguments{
-\item{track}{List of trajectories.}
+\item{filePath}{filePath to GPX file}
 }
 \value{
 Evaluation plots of track

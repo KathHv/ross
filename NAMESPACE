@@ -3,5 +3,7 @@
 export(bringFeatureToOSM)
 export(evaluateTrack)
 export(filterForClosePoints)
+export(points2line_trajectory)
 export(readGPXFile)
 export(readOSMFiles)
+export(saveGPXFile)

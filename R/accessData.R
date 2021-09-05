@@ -13,6 +13,10 @@ readGPXFile = function(fp) {
   sf::st_layers(fp)
   print(fp)
   track = sf::st_read(fp, layer ="track_points")
+
+  gpx = trackeR::readGPX(fp)
+  gpx$geometry = track$geometry
+
   return(track)
 }
 

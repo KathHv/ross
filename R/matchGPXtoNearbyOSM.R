@@ -10,6 +10,7 @@
 #'  \dontrun{
 #' points2line_trajectory(c(st_point(c(0,1)), st_point(c(1,2)), st_point(c(4,1)), st_point(c(4,2))))
 #' }
+#' @export
 points2line_trajectory = function(p) {
   c = sf::st_coordinates(p)
   i = seq(nrow(p) - 2)
@@ -49,7 +50,7 @@ points2line_trajectory = function(p) {
 #' @export
 bringFeatureToOSM = function(track, osm_features, threshold){
   osm_feature = sf::st_union(c(sf::st_union(osm_features$osm_lines), sf::st_union(osm_features$osm_multilines)))
-  nearestPoints = sf::st_nearest_points(track, osm_feature)
+  nearestPoints = sf::st_nearest_points(track$geometry, osm_feature)
 
   startingPoints = sf::st_transform(sf::st_line_sample(sf::st_transform(nearestPoints, 3857), sample = 0),4326)
   endingPoints = sf::st_transform(sf::st_line_sample(sf::st_transform(nearestPoints, 3857), sample = 1),4326)
@@ -74,13 +75,37 @@ bringFeatureToOSM = function(track, osm_features, threshold){
 }
 
 
-utils::globalVariables("m")
-
 #' A trajectory gets analyzed with respect to movement statistics.
 #'
 #' The main purpose is an evaluation of trajectories tracked during sports.
 #'
-#' @param track List of trajectories.
+#' @param track List of trajectory
+#' @param filePath String with path where GPX file shall be stored
+#' @return Evaluation plots of track
+#' @examples
+#' \dontrun{
+#'  saveGPXFile(track, "./inst/extdata/track_run_special.gpx")
+#' }
+#'
+#' @export
+saveGPXFile = function(track, filePath){
+
+  x <- sf::st_coordinates(track$geometry)[,1]
+  y <- sf::st_coordinates(track$geometry)[,2]
+  a <- c(1:length(x))
+  xy <- data.frame(x,y,a)
+  latslongs <- SpatialPointsDataFrame(coords=xy[,c(1,2)],data=xy,proj4string = CRS("+proj=longlat + ellps=WGS84"))
+
+  rgdal::writeOGR(latslongs, dsn=filePath,
+           dataset_options="GPX_USE_EXTENSIONS=yes",layer="waypoints",driver="GPX", overwrite_layer = T)
+
+}
+
+#' A GPX trajectory gets analyzed with respect to movement statistics.
+#'
+#' The main purpose is an evaluation of trajectories tracked during sports.
+#'
+#' @param filePath filePath to GPX file
 #' @return Evaluation plots of track
 #' @examples
 #' \dontrun{
@@ -89,15 +114,16 @@ utils::globalVariables("m")
 #' }
 #'
 #' @export
-evaluateTrack = function(track){
-  plot(track$geometry)
-  summary(track$time)
-  plot(track, max.plot = 26)
-  plot(track$time, 1:nrow(track))
+evaluateTrack = function(filePath){
+  track = trackeR::readGPX(filePath)
+  gpx_track = trackeR::trackeRdata(track)
+  trackeR::summary(gpx_track)
 
+  print("Speed along the route:")
   track_line = points2line_trajectory(track)
   plot(track_line["speed"], lwd = track_line$speed)
 
+  print("Route:")
   leaflet::addPolylines(leaflet::addTiles(leaflet::leaflet(track_line)))
 
 }
