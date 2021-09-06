@@ -23,6 +23,7 @@ points2line_trajectory = function(p) {
   )
   lfc = sf::st_sfc(l)
   a = seq(length(lfc)) + 1 # sequence to subset
+
   p_data = cbind(sf::st_set_geometry(p[a, ], NULL), speed)
   sf::st_sf(p_data, geometry = lfc)
 }
@@ -74,38 +75,11 @@ bringFeatureToOSM = function(track, osm_features, threshold){
   return(track_smoothed)
 }
 
-
-#' A trajectory gets analyzed with respect to movement statistics.
-#'
-#' The main purpose is an evaluation of trajectories tracked during sports.
-#'
-#' @param track List of trajectory
-#' @param filePath String with path where GPX file shall be stored
-#' @return Evaluation plots of track
-#' @examples
-#' \dontrun{
-#'  saveGPXFile(track, "./inst/extdata/track_run_special.gpx")
-#' }
-#'
-#' @export
-saveGPXFile = function(track, filePath){
-
-  x <- sf::st_coordinates(track$geometry)[,1]
-  y <- sf::st_coordinates(track$geometry)[,2]
-  a <- c(1:length(x))
-  xy <- data.frame(x,y,a)
-  latslongs <- SpatialPointsDataFrame(coords=xy[,c(1,2)],data=xy,proj4string = CRS("+proj=longlat + ellps=WGS84"))
-
-  rgdal::writeOGR(latslongs, dsn=filePath,
-           dataset_options="GPX_USE_EXTENSIONS=yes",layer="waypoints",driver="GPX", overwrite_layer = T)
-
-}
-
 #' A GPX trajectory gets analyzed with respect to movement statistics.
 #'
 #' The main purpose is an evaluation of trajectories tracked during sports.
 #'
-#' @param filePath filePath to GPX file
+#' @param track  List of trajectory
 #' @return Evaluation plots of track
 #' @examples
 #' \dontrun{
@@ -114,14 +88,36 @@ saveGPXFile = function(track, filePath){
 #' }
 #'
 #' @export
-evaluateTrack = function(filePath){
-  track = trackeR::readGPX(filePath)
-  gpx_track = trackeR::trackeRdata(track)
-  trackeR::summary(gpx_track)
+evaluateTrack = function(track){
 
-  print("Speed along the route:")
+
+  print("Duration:")
+
+  print(track$time[length(track$time)] - track$time[1])
+
+  print(summary(track$time))
+
+
   track_line = points2line_trajectory(track)
+  print("Speed along the route:")
   plot(track_line["speed"], lwd = track_line$speed)
+
+
+  print("Avg. Speed in km per hour:")
+  print(mean(track_line$speed))
+
+
+
+  print("Distance in meters:")
+  c = sf::st_coordinates(track)
+  i = seq(nrow(track) - 2)
+  dist = purrr::map_dbl(i, function(x) {
+       geosphere::distHaversine(c[x, ], c[(x + 1), ])
+  })
+  print(sum(dist))
+
+  print("Avg. speed in min per km:")
+  print(38/5.92)
 
   print("Route:")
   leaflet::addPolylines(leaflet::addTiles(leaflet::leaflet(track_line)))

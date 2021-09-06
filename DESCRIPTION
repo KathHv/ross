@@ -16,11 +16,8 @@ Imports:
   osmdata (>= 0.1.6),
   sf (>= 1.0-1),
   geosphere (>= 1.5-10),
-  magrittr,
   purrr,
-  stats,
-  trackeR,
-  rgdal
+  stats
 Suggests:
     rmarkdown,
     knitr,

@@ -4,10 +4,10 @@
 \alias{evaluateTrack}
 \title{A GPX trajectory gets analyzed with respect to movement statistics.}
 \usage{
-evaluateTrack(filePath)
+evaluateTrack(track)
 }
 \arguments{
-\item{filePath}{filePath to GPX file}
+\item{track}{List of trajectory}
 }
 \value{
 Evaluation plots of track

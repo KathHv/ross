@@ -11,12 +11,7 @@
 #' @export
 readGPXFile = function(fp) {
   sf::st_layers(fp)
-  print(fp)
   track = sf::st_read(fp, layer ="track_points")
-
-  gpx = trackeR::readGPX(fp)
-  gpx$geometry = track$geometry
-
   return(track)
 }
 
@@ -67,7 +62,7 @@ readOSMFiles = function(bbox){
 #' @export
 filterForClosePoints = function(track, threshold){
   validPoints = data.frame(track[1,])
-  thresholdUnits = units::set_units(threshold, m)
+  thresholdUnits = units::set_units(threshold, 'm')
   for(x in 2:(length(track$geometry)-1)){
     distMatrix = sf::st_distance(c(track$geometry[x-1], track$geometry[x], track$geometry[x+1]))
     if(distMatrix[1,2] < thresholdUnits|| distMatrix[2,3] < thresholdUnits){

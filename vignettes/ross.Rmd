@@ -1,5 +1,5 @@
 ---
-title: "Run on Streets"
+title: "ross"
 author: "Katharina Hovestadt"
 output: rmarkdown::html_vignette
 vignette: >
@@ -7,6 +7,11 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+# Run on Streets
+
+The ross package has the main purpose to match a trajectory out of a GPX file to the corresponding OSM streets to make different rounds comparable.
+It was writen in context of the Spatial Data Science in R course in Summer term 2021 with Prof. Dr. Edzer Pebesma.
+
 NOTE:
 In case of a missing vignette, I recommend to run the following
 ```{r, eval = FALSE}
@@ -17,14 +22,17 @@ file.copy(dir("vignettes", full.names=TRUE), "inst/doc", overwrite=TRUE)
 
 
 
-```{r, echo=FALSE, include = FALSE}
+```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 ```
 
-```{r setup}
+
+
+
+```{r setup, inlcude = FALSE}
 library(ross)
 library(sf)
 library(osmdata)
@@ -61,11 +69,14 @@ Since the API is limited to a certain amount of requests, this computation is ba
 
 In the following computations two runs are taken into account. One was tracked with a Samsung Watch, the other with an Apple Watch. Both runners ran together. The run started on 2021-05-07T06:34:36Z and ended on at 2021-05-07T07:12:38. The computed distance from the Samsung watch was 5.64km against 5.83km with Apple watch. The Samsung watch measured an average speed of 6:40minutes per kilometer and a total movement time of 37:37km. The apple watch measured 6:29 minutes per kilometer and a total movement time of 37:51min.
 
-Samsung Watch
-![Samsung Watch](samsung_watch.jpg)
 
-Apple Watch
-![Apple Watch](apple_watch.jpg)
+```{r, out.width="50%", fig.cap="Track with Samsung watch"}
+knitr::include_graphics("samsung_watch.jpg")
+```
+
+```{r, out.width="50%", fig.cap="Track with Apple watch"}
+knitr::include_graphics("apple_watch.jpg")
+```
 
 
 
@@ -109,18 +120,26 @@ After preparing the tracks, the measurement points along the track need to be ma
 ```{r}
 threshold = 10
 #Samsung
-gpx_features_samsung_osm = bringFeatureToOSM(gpx_features_samsung_filtered, osm_features, threshold)
+gpx_features_samsung_osm = bringFeatureToOSM(gpx_features_samsung, osm_features, threshold)
 #saveGPXFile(gpx_features_samsung_osm, "./inst/extdata/track_samsung_watch_smoothed.gpx")
 #Apple
-gpx_features_apple_osm = bringFeatureToOSM(gpx_features_apple_filtered, osm_features, threshold)
+gpx_features_apple_osm = bringFeatureToOSM(gpx_features_apple, osm_features, threshold)
 #saveGPXFile(gpx_features_samsung_osm, "./inst/extdata/track_apple_watch_smoothed.gpx")
 ```
 
 
 The evaluation function shows running statistics about the new computed track.
+
+### Samsung
 ```{r}
 #Samsung
 evaluateTrack(gpx_features_samsung_osm)
+
+```
+
+
+### Apple
+```{r}
 #Apple
 evaluateTrack(gpx_features_apple_osm)
 ```
@@ -128,14 +147,19 @@ evaluateTrack(gpx_features_apple_osm)
 
 ## Discussion
 
+The results show that the distance of the two tracks is the same after processing (5.91km). Before they had a difference of 190m (5.64km and 5.83km). The average speed became a bit slower.
 
-Difficult for streets with many paths (path, footpath, street, footpath, house, footpath, streets)
+The issue of different distance computations by different watches can be minimized with this package. The results of a Samsung watch and an Apple watch become comparable.
 
 
-As a next step the heading of the track and the corresponding OSM feature part should be recognized. The issue with jumping points on the features at junctions can be solved with that.
+The maps and especially the speed plot show that matching the track to the OSM path is difficult at junctions and places where many paths are close together or meet each other. The computation must be improved at such places. 
+As a next step the heading of the track and the corresponding OSM feature part should be recognized for that. The issue with jumping points on features at junctions can be solved by that.
+
+
 
 ## References
-Strava in R API
-Read GPX data
-Read OSM data
+* [Strava in R API](https://bldavies.com/blog/accessing-strava-api/).
+* [Read GPX data](https://geocompr.github.io/geocompkg/articles/gps-tracks.html?tag=makemoney0821-20)
+* [Read OSM data](https://dominicroye.github.io/en/2018/accessing-openstreetmap-data-with-r/)
+
 
